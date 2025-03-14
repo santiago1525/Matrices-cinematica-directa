@@ -66,7 +66,7 @@ function TransformationMatrix({ dhParams }) {
 
   return (
     <div className="transformation-container">
-      <h2>Matrices de Transformación</h2>
+      <h2 className="transformation-container-title">Matrices de Transformación</h2>
 
       {/* Descomposición en A */}
       <h4 className="title-descompotition">Descomposición en a</h4>
@@ -87,7 +87,7 @@ function TransformationMatrix({ dhParams }) {
       {/* Matriz Final Descomposición en A */}
       {finalMatrixA && (
         <div className="final-matrix">
-          <h2>Matriz de Transformación Final (Descomposición en A)</h2>
+          <h2 className="final-matrix-title">Matriz de Transformación Final (Descomposición en A)</h2>
           <div className="matrix">
             {finalMatrixA.flat().map((value, idx) => (
               <div key={idx}>{value.toFixed(4)}</div>
@@ -115,7 +115,7 @@ function TransformationMatrix({ dhParams }) {
       {/* Matriz Final Descomposición en D */}
       {finalMatrixD && (
         <div className="final-matrix">
-          <h2>Matriz de Transformación Final (Descomposición en D)</h2>
+          <h2 className="final-matrix-title">Matriz de Transformación Final (Descomposición en D)</h2>
           <div className="matrix">
             {finalMatrixD.flat().map((value, idx) => (
               <div key={idx}>{value.toFixed(4)}</div>

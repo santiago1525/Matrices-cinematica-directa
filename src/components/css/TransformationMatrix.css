@@ -5,6 +5,11 @@
     align-items: center;
 }
 
+.transformation-container-title {
+    font-size: 1.4em;
+    padding: 20px 0;
+}
+
 .matrix-container {
     display: flex;
     flex-direction: row;
@@ -40,16 +45,23 @@
     color: #D36135;
     padding: 20px 0;
     margin: 0 0 10px 0;
+    font-size: 1.2em;
 }
 
 .final-matrix {
-    width: 85%;
+    width: 100%;
     margin-bottom: 30px;
+}
+.final-matrix-title {
+    font-size: 1.4em;
 }
 
 @media screen and (min-width: 800px) {
     .matrix {
         border-radius: 20px;
         border: 2px solid #4CAF50;
+    }
+    .final-matrix {
+        width: 85%;
     }
 }

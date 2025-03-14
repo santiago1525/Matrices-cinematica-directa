@@ -35,6 +35,7 @@ function App() {
         {step === 1 && (
           <div className="modal">
             <h2>Selecciona el número de eslabones</h2>
+            <h4>El número debe ser entre 1 y 4 eslabones</h4>
             <input
               type="number"
               min="1"
