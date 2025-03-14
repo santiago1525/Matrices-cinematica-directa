@@ -31,7 +31,10 @@
     text-align: center;
     font-family: monospace;
     color: #000;
+}
 
+.matrix.final {
+    background-color: #83BCA9;
 }
 
 .matrix div {
@@ -50,7 +53,7 @@
 
 .final-matrix {
     width: 100%;
-    margin-bottom: 30px;
+    margin: 30px 0px 80px 0px;
 }
 .final-matrix-title {
     font-size: 1.4em;
@@ -59,7 +62,7 @@
 @media screen and (min-width: 800px) {
     .matrix {
         border-radius: 20px;
-        border: 2px solid #4CAF50;
+        border: 3px solid #000;
     }
     .final-matrix {
         width: 85%;
