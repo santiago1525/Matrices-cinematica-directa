@@ -1,0 +1,55 @@
+.transformation-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.matrix-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 10px 0 20px 0;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.matrix {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 10px;
+    border: none;
+    background-color: #f9f9f9;
+    text-align: center;
+    font-family: monospace;
+    color: #000;
+
+}
+
+.matrix div {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.title-descompotition {
+    width: 100%;
+    background-color: #fff;
+    color: #000;
+    padding: 20px 0;
+    margin: 0 0 10px 0;
+}
+
+.final-matrix {
+    width: 85%;
+    margin-bottom: 30px;
+}
+
+@media screen and (min-width: 800px) {
+    .matrix {
+        border-radius: 20px;
+        border: 2px solid #4CAF50;
+    }
+}

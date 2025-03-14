@@ -1,0 +1,72 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+.App-header {
+  background-color: #282B28;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: #fff;
+  padding-bottom: 30px;
+}
+
+.App-title {
+  width: 100%;
+  background-color: #83BCA9;
+  box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.75);
+-webkit-box-shadow: -1px 10px 5px 0px rgba(0,0,0,0.75);
+-moz-box-shadow: -1px 10px 5px 0px rgba(0,0,0,0.75);
+  margin: 0;
+  margin-bottom: 70px;
+  padding: 40px 0;
+}
+
+.separator {
+  padding-top: 50%;
+}
+
+.App-button {
+  width: 210px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  background-color: #D36135;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 30px;
+}
+
+.input-box {
+  width: 210px;
+  height: 40px;
+  border: 1px solid;
+  border-radius: 15px;
+  padding: 10px;
+  background-color: #fff;
+  font-size: 15px;
+  margin-bottom: 10px ;
+}
+
+@media screen and (min-width: 800px) {
+  .separator {
+    padding-top: 10%;
+  }
+  
+}
+
+
