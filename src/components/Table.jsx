@@ -8,7 +8,7 @@ const Table = ({ dhParams }) => {
     <table className="table">
       <thead>
         <tr className='table-titles'>
-          <th>Eslabón</th>
+          <th>i</th>
           <th>θ</th>
           <th>α</th>
           <th>a</th>
