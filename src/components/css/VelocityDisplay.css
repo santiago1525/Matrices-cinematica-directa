@@ -1,0 +1,6 @@
+.velocity-container {
+    padding: 0 50px;
+}
+.velocity-container p:last-child{
+    margin: 100px 0;
+}

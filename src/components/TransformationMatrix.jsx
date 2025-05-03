@@ -55,7 +55,7 @@ const safeAdd = (x, y) => {
 };
 
 // Multiplicación de matrices 4x4: se opera término a término
-const multiplyMatrices = (A, B) => {
+export const multiplyMatrices = (A, B) => {
   let result = Array(4)
     .fill(null)
     .map(() => Array(4).fill(0));
@@ -84,7 +84,7 @@ const multiplyMatrices = (A, B) => {
 
 
 // Construye la matriz de transformación "A"
-const computeMatrixA = ({ θ, α, a, d }) => {
+export const computeMatrixA = ({ θ, α, a, d }) => {
   const cosT = getCos(θ);
   const sinT = getSin(θ);
   const cosA = getCos(α);
@@ -140,7 +140,7 @@ const computeMatrixA = ({ θ, α, a, d }) => {
 };
 
 // Construye la matriz de transformación "D"
-const computeMatrixD = ({ θ, α, a, d }) => {
+export const computeMatrixD = ({ θ, α, a, d }) => {
   const cosT = getCos(θ);
   const sinT = getSin(θ);
   const cosA = getCos(α);
@@ -195,7 +195,7 @@ const computeMatrixD = ({ θ, α, a, d }) => {
   ];
 };
 
-function TransformationMatrix({ dhParams }) {
+function TransformationMatrix({ dhParams, onMatricesComputed }) {
   const [finalMatrixA, setFinalMatrixA] = useState(null);
   const [finalMatrixD, setFinalMatrixD] = useState(null);
 
@@ -214,8 +214,10 @@ function TransformationMatrix({ dhParams }) {
         resultD = multiplyMatrices(resultD, computeMatrixD(dhParams[i]));
       }
       setFinalMatrixD(resultD);
+
+      onMatricesComputed?.({A: resultA, D: resultD})
     }
-  }, [dhParams]);
+  }, [dhParams, onMatricesComputed]);
 
   // Función para renderizar una celda: si es numérica se formatea a 4 decimales
   const renderCell = (cell) => {
@@ -301,3 +303,10 @@ function TransformationMatrix({ dhParams }) {
 }
 
 export default TransformationMatrix;
+
+
+
+
+
+
+
