@@ -83,7 +83,7 @@ export function computeVelocities(dhParams, qDot, finalA) {
   ];
   const zs = [], os = [];
   for (let i = 0; i < n; i++) {
-    T = multiplyMatrices(T, computeMatrixA(dhParams[i]));
+   // T = multiplyMatrices(T, computeMatrixA(dhParams[i]));
     zs.push([ T[0][2], T[1][2], T[2][2] ]);
     os.push([ T[0][3], T[1][3], T[2][3] ]);
   }

@@ -6,6 +6,7 @@
   height: 40vmin;
   pointer-events: none;
 }
+
 .App-header {
   background-color: #282B28;
   min-height: 100vh;
@@ -20,9 +21,9 @@
 .App-title {
   width: 100%;
   background-color: #83BCA9;
-  box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.75);
--webkit-box-shadow: -1px 10px 5px 0px rgba(0,0,0,0.75);
--moz-box-shadow: -1px 10px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: -1px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -1px 10px 5px 0px rgba(0, 0, 0, 0.75);
   margin: 0;
   margin-bottom: 80px;
   padding: 40px 0;
@@ -61,14 +62,55 @@
   padding: 10px;
   background-color: #fff;
   font-size: 15px;
-  margin-bottom: 10px ;
+  margin-bottom: 10px;
 }
+
+.fixed-menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.button-menu {
+  background-color: #D36135;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: #fff solid 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.App-button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.input-box {
+  margin: 10px;
+  padding: 10px;
+}
+
 
 @media screen and (min-width: 800px) {
   .separator {
     padding-top: 10%;
   }
-  
+
+  .fixed-menu {
+    flex-direction: column;
+    position: fixed;
+    z-index: 100;
+    left: 20px;
+    top: 50%;
+  }
+
 }
-
-

@@ -25,7 +25,14 @@ function InputForm({ numLinks, setDhParams, setStep }) {
       α: param.α.trim() === "" ? 0 : isNaN(param.α) ? param.α : Number(param.α),
       a: param.a.trim() === "" ? 0 : isNaN(param.a) ? param.a : Number(param.a),
       d: param.d.trim() === "" ? 0 : isNaN(param.d) ? param.d : Number(param.d),
-    }));
+    })); 
+
+    /* const cleanedParams = params.map((param) => ({
+      θ: param.θ.trim() === "" ? "0" : param.θ.trim(),
+      α: param.α.trim() === "" ? "0" : param.α.trim(),
+      a: param.a.trim() === "" ? "0" : param.a.trim(),
+      d: param.d.trim() === "" ? "0" : param.d.trim(),
+    })); */
 
     setDhParams(cleanedParams);
     setStep(3);

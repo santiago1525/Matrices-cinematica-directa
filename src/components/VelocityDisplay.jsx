@@ -1,28 +1,47 @@
 // src/components/VelocityDisplay.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import './css/VelocityDisplay.css'
 
-export default function VelocityDisplay({ vLin, vAng }) {
-    const fmt = x =>
-        (typeof x === 'number')
-            ? x.toFixed(4)
-            : x;       // si es string (simbólico), lo dejas tal cual
+export default function VelocityDisplay({ mats }) {
 
-    return (
-        <div>
-            <h3>Velocidades del efector final</h3>
-            <div className="velocity-container">
-                <p>
-                    <strong>Lineal:</strong>{' '}
-                    [{vLin.map(fmt).join(', ')}]
-                </p>
-                <p>
-                    <strong>Angular:</strong>{' '}
-                    [{vAng.map(fmt).join(', ')}]
-                </p>
+  const [derivadas, setDerivadas] = useState([])
 
-            </div>
+  if (!mats.A || !mats.D) return <p>Las matrices no están disponibles.</p>;
+
+  // Obtener la primera fila de la matriz A
+  // const firstRowA = mats.A[3]; 
+
+  // Obtener la posicion columna de la matriz A
+  const ColumnA = mats.D.map(row => row[3]);
+
+  // Obtener la posicion columna de la matriz D
+  const ColumnD = mats.D.map(row => row[3]);
+
+  return (
+    <>
+      <div className="velocity-display-container">
+
+        <div className='vector-a'>
+          <h3>Vector Posición de la matriz A:</h3>
+          <pre>{JSON.stringify(ColumnA, null, 2)}</pre>
         </div>
-    );
-}
-
+        <div className="vector-d">
+          <h3>Vector Posición de la matriz D:</h3>
+          <pre>{JSON.stringify(ColumnD, null, 2)}</pre>
+        </div>
+      </div>
+      <h3>Ingresa las derivadas</h3>
+      <input
+        value={derivadas}
+        onChange={(e) => setDerivadas(parseInt(e.target.value) || 0)}
+        className="input-box"
+      />
+      <button
+        className="App-button"
+        onClick={() => { }}
+      >
+        Continuar
+      </button>
+    </>
+  );
+} 

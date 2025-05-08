@@ -1,6 +1,46 @@
-.velocity-container {
-    padding: 0 50px;
-}
-.velocity-container p:last-child{
-    margin: 100px 0;
-}
+/* Contenedor principal */
+.velocity-display-container {
+    font-family: 'Arial', sans-serif;
+    margin: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    flex-wrap: wrap;
+    
+  }
+  
+  /* Títulos */
+  .velocity-display-container h3 {
+    font-size: 1.2em;
+    color: #fff;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  
+  /* Bloques de texto con las matrices */
+  pre {
+    font-size: 1em;
+    color: #f5f5f5;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    line-height: 1.6;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Mensaje de error o ausencia de matrices */
+  p {
+    color: #d9534f;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 15px;
+  }
+  

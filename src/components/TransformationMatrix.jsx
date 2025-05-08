@@ -1,5 +1,6 @@
 import "./css/TransformationMatrix.css";
 import { useEffect, useState } from "react";
+import { simplify, parse } from 'mathjs';
 
 // Verifica si un valor es numérico
 const isNumeric = (val) => {
@@ -30,29 +31,33 @@ const getSin = (exp) => {
 // Procesa los parámetros lineales "a" y "d"
 const processLinear = (exp) => (isNumeric(exp) ? parseFloat(exp) : exp);
 
-// Funciones seguras para multiplicar y sumar
+// Simplifica automáticamente cualquier expresión
+
+// Función general de simplificación simbólica
+const simplifyExpr = (expr) => {
+  try {
+    // Parsea y simplifica usando reglas simbólicas estándar
+    return simplify(parse(expr)).toString();
+  } catch (error) {
+    console.warn("No se pudo simplificar:", expr);
+    return expr;
+  }
+};
+
+// Multiplicación segura con simplificación simbólica completa
 const safeMultiply = (x, y) => {
-  if (x === 0 || y === 0) {
-    return 0;
-  }
-  if (typeof x === "number" && typeof y === "number") {
-    return x * y;
-  }
-  if (x === "0" || y === "0") {
-    return 0;
-  }
-  return `(${x})*(${y})`;
+  const expr = `(${x}) * (${y})`;
+  return simplifyExpr(expr);
 };
 
-
+// Suma segura con simplificación simbólica completa
 const safeAdd = (x, y) => {
-  if (typeof x === "number" && typeof y === "number") {
-    return x + y;
-  }
-  if (x === 0) return y;
-  if (y === 0) return x;
-  return `${x} + ${y}`;
+  const expr = `(${x}) + (${y})`;
+  return simplifyExpr(expr);
 };
+
+
+
 
 // Multiplicación de matrices 4x4: se opera término a término
 export const multiplyMatrices = (A, B) => {
@@ -92,35 +97,18 @@ export const computeMatrixA = ({ θ, α, a, d }) => {
   const aVal = processLinear(a);
   const dVal = processLinear(d);
 
+
   // Fila 1: [cosθ, -cosα*sinθ, sinθ*sinα, a*cosθ]
   const r1_1 = cosT;
-  const r1_2 =
-    typeof cosA === "number" && typeof sinT === "number"
-      ? -cosA * sinT
-      : `-(${cosA})*(${sinT})`;
-  const r1_3 =
-    typeof sinT === "number" && typeof sinA === "number"
-      ? sinT * sinA
-      : `(${sinT})*(${sinA})`;
-  const r1_4 =
-    typeof aVal === "number" && typeof cosT === "number"
-      ? aVal * cosT
-      : `(${aVal})*(${cosT})`;
+  const r1_2 = safeMultiply(`-${cosA}`,sinT);
+  const r1_3 = safeMultiply(sinT, sinA);
+  const r1_4 = safeMultiply(aVal, cosT);
 
   // Fila 2: [sinθ, cosθ*cosα, -cosθ*sinα, a*sinθ]
   const r2_1 = sinT;
-  const r2_2 =
-    typeof cosT === "number" && typeof cosA === "number"
-      ? cosT * cosA
-      : `(${cosT})*(${cosA})`;
-  const r2_3 =
-    typeof cosT === "number" && typeof sinA === "number"
-      ? -cosT * sinA
-      : `-(${cosT})*(${sinA})`;
-  const r2_4 =
-    typeof aVal === "number" && typeof sinT === "number"
-      ? aVal * sinT
-      : `(${aVal})*(${sinT})`;
+  const r2_2 = safeMultiply(cosT,cosA);
+  const r2_3 = safeMultiply(`-${cosT}`,sinA);
+  const r2_4 = safeMultiply(aVal,sinT);
 
   // Fila 3: [0, sinα, cosα, d]
   const r3_1 = 0;
@@ -139,6 +127,7 @@ export const computeMatrixA = ({ θ, α, a, d }) => {
   ];
 };
 
+
 // Construye la matriz de transformación "D"
 export const computeMatrixD = ({ θ, α, a, d }) => {
   const cosT = getCos(θ);
@@ -150,39 +139,21 @@ export const computeMatrixD = ({ θ, α, a, d }) => {
 
   // Fila 1: [cosθ, -sinθ, 0, a]
   const r1_1 = cosT;
-  const r1_2 = typeof sinT === "number" ? -sinT : `-(${sinT})`;
+  const r1_2 = safeMultiply(`-${sinT}`, 1);
   const r1_3 = 0;
   const r1_4 = aVal;
 
   // Fila 2: [sinθ*cosα, cosθ*cosα, -sinα, -d*sinα]
-  const r2_1 =
-    typeof sinT === "number" && typeof cosA === "number"
-      ? sinT * cosA
-      : `(${sinT})*(${cosA})`;
-  const r2_2 =
-    typeof cosT === "number" && typeof cosA === "number"
-      ? cosT * cosA
-      : `(${cosT})*(${cosA})`;
-  const r2_3 = typeof sinA === "number" ? -sinA : `-(${sinA})`;
-  const r2_4 =
-    typeof dVal === "number" && typeof sinA === "number"
-      ? -dVal * sinA
-      : `-(${dVal})*(${sinA})`;
+  const r2_1 = safeMultiply(sinT,cosA);
+  const r2_2 = safeMultiply(cosT,cosA);
+  const r2_3 = safeMultiply(`-${sinA}`, 1);
+  const r2_4 = safeMultiply(`-${dVal}`,sinA);
 
   // Fila 3: [sinθ*sinα, cosθ*sinα, cosα, d*cosα]
-  const r3_1 =
-    typeof sinT === "number" && typeof sinA === "number"
-      ? sinT * sinA
-      : `(${sinT})*(${sinA})`;
-  const r3_2 =
-    typeof cosT === "number" && typeof sinA === "number"
-      ? cosT * sinA
-      : `(${cosT})*(${sinA})`;
+  const r3_1 = safeMultiply(sinT,sinA);
+  const r3_2 = safeMultiply(cosT, sinA);
   const r3_3 = cosA;
-  const r3_4 =
-    typeof dVal === "number" && typeof cosA === "number"
-      ? dVal * cosA
-      : `(${dVal})*(${cosA})`;
+  const r3_4 = safeMultiply(dVal, cosA);
 
   // Fila 4: [0, 0, 0, 1]
   const r4 = [0, 0, 0, 1];
@@ -302,11 +273,4 @@ function TransformationMatrix({ dhParams, onMatricesComputed }) {
   );
 }
 
-export default TransformationMatrix;
-
-
-
-
-
-
-
+export default TransformationMatrix; 
