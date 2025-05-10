@@ -28,12 +28,6 @@ function App() {
   }, []);
 
 
-  const handleCompute = () => {
-    setStep(0); // Reiniciar flujo
-    setDhParams([]);
-    setNumLinks(0);
-  };
-
   const goToPreviousStep = () => {
     if (prevStep !== null) {
       setStep(prevStep); // Vuelve al paso anterior

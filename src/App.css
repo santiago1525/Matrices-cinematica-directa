@@ -71,6 +71,7 @@
   justify-content: center;
   align-items: center;
   gap: 40px;
+  padding: 0 0 40px 0;
 }
 
 .button-menu {
@@ -111,6 +112,7 @@
     z-index: 100;
     left: 20px;
     top: 50%;
+    padding: 0;
   }
 
 }
