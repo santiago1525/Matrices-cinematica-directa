@@ -2,6 +2,7 @@ import "./css/TransformationMatrix.css";
 import { useEffect, useState } from "react";
 import { simplify, parse } from 'mathjs';
 
+
 // Verifica si un valor es numérico
 const isNumeric = (val) => {
   return !isNaN(parseFloat(val)) && isFinite(val);
@@ -54,8 +55,7 @@ const safeMultiply = (x, y) => {
 const safeAdd = (x, y) => {
   const expr = `(${x}) + (${y})`;
   return simplifyExpr(expr);
-};
-
+}; 
 
 
 
@@ -83,9 +83,7 @@ export const multiplyMatrices = (A, B) => {
     }
   }
   return result;
-};
-
-
+};  
 
 
 // Construye la matriz de transformación "A"
@@ -204,7 +202,7 @@ function TransformationMatrix({ dhParams, onMatricesComputed }) {
         Matrices de Transformación
       </h2>
 
-      {/* Sección de matrices descompuestas en A */}
+      {/* Sección de matrices descompuestas en A  */}
       <h4 className="title-descompotition">Descomposición en a</h4>
       {dhParams.map((params, index) => {
         const matrixA = computeMatrixA(params);
@@ -223,7 +221,7 @@ function TransformationMatrix({ dhParams, onMatricesComputed }) {
         );
       })}
 
-      {/* Matriz Final para A */}
+      {/* Matriz Final para A  */}
       {finalMatrixA && (
         <div className="final-matrix">
           <h2 className="final-matrix-title">
@@ -237,7 +235,7 @@ function TransformationMatrix({ dhParams, onMatricesComputed }) {
         </div>
       )}
 
-      {/* Sección de matrices descompuestas en D */}
+      {/* Sección de matrices descompuestas en D */} 
       <h4 className="title-descompotition">Descomposición en d</h4>
       {dhParams.map((params, index) => {
         const matrixD = computeMatrixD(params);
@@ -256,7 +254,7 @@ function TransformationMatrix({ dhParams, onMatricesComputed }) {
         );
       })}
 
-      {/* Matriz Final para D */}
+      {/*  Matriz Final para D */} 
       {finalMatrixD && (
         <div className="final-matrix">
           <h2 className="final-matrix-title">
@@ -273,4 +271,5 @@ function TransformationMatrix({ dhParams, onMatricesComputed }) {
   );
 }
 
-export default TransformationMatrix; 
+export default TransformationMatrix;  
+

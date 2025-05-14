@@ -1,5 +1,7 @@
 // src/components/VelocityDisplay.jsx
 import React, { useState } from 'react';
+// Agrega esta línea arriba junto con tus imports
+import Algebrite from 'algebrite';
 import { create, all } from 'mathjs';
 import './css/VelocityDisplay.css';
 
@@ -9,23 +11,36 @@ export default function VelocityDisplay({ mats }) {
   const [variablesInput, setVariablesInput] = useState('');
   const [derivatives, setDerivatives] = useState([]);
   const [selected, setSelected] = useState(true);
+  const [matrixDerivatives, setMatrixDerivatives] = useState([]);
+  const [determinantExpr, setDeterminantExpr] = useState('');
 
 
   if (!mats.A || !mats.D) return <p>Las matrices no están disponibles.</p>;
 
   // Obtener la columna de posición de las matrices A y D
-  const ColumnA = mats.A.map(row => String(row[3]));
-  const ColumnD = mats.D.map(row => String(row[3]));
+  const ColumnA = mats.A.slice(0, 3).map(row => String(row[3]));
+  const ColumnD = mats.D.slice(0, 3).map(row => String(row[3]));
 
   const handleCalculateDerivatives = (Column) => {
     try {
-      // Convertir entrada del usuario en un array de variables simbólicas
       const variables = variablesInput.split(',').map(v => v.trim()).filter(v => v);
-
-      // Validar que todas las variables existan como identificadores válidos
       const symbols = variables.map(v => math.parse(v).name);
 
-      // Derivar cada expresión del vector ColumnA con respecto a cada variable
+      const matrix = symbols.map(sym => {
+        return Column.map(exprStr => {
+          try {
+            const parsedExpr = math.parse(exprStr);
+            const deriv = math.derivative(parsedExpr, sym);
+            return deriv.toString();
+          } catch (err) {
+            return `Error: ${err.message}`;
+          }
+        });
+      });
+
+      setMatrixDerivatives(matrix);
+
+      // También conservamos el estado antiguo en caso de que lo uses aún en la interfaz
       const derivs = Column.map((exprStr, index) => {
         const parsedExpr = math.parse(exprStr);
         const derivadasPorVar = symbols.map(sym => {
@@ -41,17 +56,53 @@ export default function VelocityDisplay({ mats }) {
           derivadas: derivadasPorVar,
         };
       });
-
       setDerivatives(derivs);
+
     } catch (err) {
       console.error("Error en el cálculo de derivadas:", err);
       alert("Error en la entrada o el cálculo: " + err.message);
     }
   };
 
+  const handleCalculateDeterminant = () => {
+    if (matrixDerivatives.length !== matrixDerivatives[0]?.length) {
+      setDeterminantExpr("La matriz no es cuadrada. No se puede calcular el determinante.");
+      return;
+    }
+
+    try {
+      // Prepara la matriz en formato Algebrite (cadena tipo matriz)
+      const algebriteMatrixString = '[' +
+        matrixDerivatives.map(row =>
+          '[' + row.map(cell =>
+            cell
+              .replace(/θ/g, 'theta') // reemplazo por compatibilidad
+              .replace(/π/g, 'pi')
+          ).join(',') + ']'
+        ).join(',') + ']';
+
+      // Ejecuta el determinante con Algebrite
+      const result = Algebrite.run(`det(${algebriteMatrixString})`);
+      const simplified = Algebrite.run(`simplify(${result})`);
+
+      // Convertir 'theta' a su símbolo 'θ' en el resultado
+      const finalResult = simplified.toString().replace(/theta/g, 'θ').replace(/pi/g, 'π');
+
+      // Actualiza el estado con el determinante simbólico
+      setDeterminantExpr(finalResult);
+
+    } catch (err) {
+      setDeterminantExpr(`Error al calcular el determinante con Algebrite: ${err.message}`);
+    }
+  };
+
+
+
+
+
   return (
     <>
-      {/* Pestañas */}
+      {/* // Pestañas */}
       <h3 className='indicator'>Seleccione la matriz:</h3>
       <div className='button-selected-container'>
         <button className='button-selected'
@@ -73,7 +124,7 @@ export default function VelocityDisplay({ mats }) {
       {selected ? (
         <>
           <div className="velocity-display-container">
-            <div className='vector'>
+            <div className="vector">
               <h3>Vector Posición de la matriz A:</h3>
               <p>{JSON.stringify(ColumnA, null, 2)}</p>
             </div>
@@ -83,7 +134,7 @@ export default function VelocityDisplay({ mats }) {
           <input
             value={variablesInput}
             onChange={(e) => setVariablesInput(e.target.value)}
-            className="input-box"
+            className="input-box derivatives-button"
             placeholder="θ1,θ2,a1,a2"
           />
           <button
@@ -109,6 +160,42 @@ export default function VelocityDisplay({ mats }) {
                 ))}
               </div>
             ))}
+
+
+            {matrixDerivatives.length > 0 && (
+              <div className="matrix-display">
+                <h3>Matriz Velocidades Lineales:</h3>
+                <table className="derivative-matrix">
+                  <tbody>
+                    {matrixDerivatives.map((row, i) => (
+                      <tr key={i}>
+                        {row.map((val, j) => (
+                          <td key={j}>{val}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {matrixDerivatives.length > 0 && (
+              <div className="determinant-section">
+                <button className="App-button" onClick={handleCalculateDeterminant}>
+                  Calcular Determinante
+                </button>
+
+                {determinantExpr && (
+                  <>
+                    <h3>Determinante Simbólico:</h3>
+                    <div className="container-determinant">
+                      <p className='determinant'>{determinantExpr}</p>
+
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </>
       ) : (
@@ -124,7 +211,7 @@ export default function VelocityDisplay({ mats }) {
           <input
             value={variablesInput}
             onChange={(e) => setVariablesInput(e.target.value)}
-            className="input-box"
+            className="input-box derivatives-button"
             placeholder="θ1,θ2,a1,a2"
           />
           <button
@@ -150,7 +237,46 @@ export default function VelocityDisplay({ mats }) {
                 ))}
               </div>
             ))}
+
+
+            {matrixDerivatives.length > 0 && (
+              <div className="matrix-display">
+                <h3>Matriz Velocidades Lineales:</h3>
+                <table className="derivative-matrix">
+                  <tbody>
+                    {matrixDerivatives.map((row, i) => (
+                      <tr key={i}>
+                        {row.map((val, j) => (
+                          <td key={j}>{val}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+
+            {matrixDerivatives.length > 0 && (
+              <div className="determinant-section">
+                <button className="App-button" onClick={handleCalculateDeterminant}>
+                  Calcular Determinante
+                </button>
+
+                {determinantExpr && (
+                  <>
+                    <h3>Determinante Simbólico:</h3>
+                    <div className="container-determinant">
+                      <p className='determinant'>{determinantExpr}</p>
+
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
           </div>
+
+
         </>
       )}
 
