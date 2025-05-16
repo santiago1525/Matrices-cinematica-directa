@@ -191,7 +191,7 @@ function TransformationMatrix({ dhParams, onMatricesComputed }) {
   // Función para renderizar una celda: si es numérica se formatea a 4 decimales
   const renderCell = (cell) => {
     if (typeof cell === "number") {
-      return cell.toFixed(4);
+      return cell.toFixed(0);
     }
     return cell;
   };

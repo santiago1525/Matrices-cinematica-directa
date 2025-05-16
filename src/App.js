@@ -116,6 +116,7 @@ function App() {
           step === 4 && (
             <VelocityDisplay
               mats={mats}
+              numLinks={numLinks}
             />
           )
         }
