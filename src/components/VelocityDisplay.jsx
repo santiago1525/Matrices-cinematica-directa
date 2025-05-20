@@ -114,35 +114,41 @@ export default function VelocityDisplay({ mats, numLinks }) {
   };
 
   const handleCalculateDeterminant = () => {
-    if (matrixDerivatives.length !== matrixDerivatives[0]?.length) {
-      setDeterminantExpr("La matriz no es cuadrada. No se puede calcular el determinante.");
-      return;
-    }
+  let rows = matrixDerivatives.length;
+  let cols = matrixDerivatives[0]?.length || 0;
 
-    try {
-      // Prepara la matriz en formato Algebrite (cadena tipo matriz)
-      const algebriteMatrixString = '[' +
-        matrixDerivatives.map(row =>
-          '[' + row.map(cell =>
-            cell
-              .replace(/θ/g, 'theta') // reemplazo por compatibilidad
-              .replace(/π/g, 'pi')
-          ).join(',') + ']'
-        ).join(',') + ']';
+  // Determinar el tamaño máximo
+  const maxSize = Math.max(rows, cols);
 
-      // Ejecuta el determinante con Algebrite
-      const result = Algebrite.run(`det(${algebriteMatrixString})`);
-      const simplified = Algebrite.run(`simplify(${result})`);
+  // Rellenar la matriz con ceros hasta que sea cuadrada
+  const squaredMatrix = Array.from({ length: maxSize }, (_, i) => 
+    Array.from({ length: maxSize }, (_, j) => 
+      (matrixDerivatives[i]?.[j] !== undefined ? matrixDerivatives[i][j] : '0')
+    )
+  );
 
-      // Convertir 'theta' a su símbolo 'θ' en el resultado
-      const finalResult = simplified.toString().replace(/theta/g, 'θ').replace(/pi/g, 'π');
+  try {
+    // Prepara la matriz en formato Algebrite
+    const algebriteMatrixString = '[' +
+      squaredMatrix.map(row =>
+        '[' + row.map(cell =>
+          cell
+            .replace(/θ/g, 'theta')
+            .replace(/π/g, 'pi')
+        ).join(',') + ']'
+      ).join(',') + ']';
 
-      setDeterminantExpr(finalResult);
+    const result = Algebrite.run(`det(${algebriteMatrixString})`);
+    const simplified = Algebrite.run(`simplify(${result})`);
+    const finalResult = simplified.toString().replace(/theta/g, 'θ').replace(/pi/g, 'π');
 
-    } catch (err) {
-      setDeterminantExpr(`Error al calcular el determinante con Algebrite: ${err.message}`);
-    }
-  };
+    setDeterminantExpr(finalResult);
+
+  } catch (err) {
+    setDeterminantExpr(`Error al calcular el determinante con Algebrite: ${err.message}`);
+  }
+};
+
 
   // Handler para cambiar si el vector z es paralelo o rotado para un eslabón
   const handleZParallelChange = (index, value) => {
