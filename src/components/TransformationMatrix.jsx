@@ -452,7 +452,7 @@ function TransformationMatrix({ dhParams, onMatricesComputed }) {
   return (
     <div className="transformation-container">
       <h2 className="transformation-container-title">Matrices de Transformación</h2>
-      <h4 className="title-descompotition">Descomposición en a</h4>
+      <h4 className="title-descompotition">Descomposición en a (RTTR)</h4>
       {dhParams.map((params, i) => (
         <div key={i} className="matrix-container">
           <h3>T<sub>{i}</sub><sup>{i + 1}</sup></h3>
@@ -465,7 +465,7 @@ function TransformationMatrix({ dhParams, onMatricesComputed }) {
           <div className="matrix final">{finalMatrixA.flat().map((v, idx) => <div key={idx}>{renderCell(v)}</div>)}</div>
         </div>
       )}
-      <h4 className="title-descompotition">Descomposición en d</h4>
+      <h4 className="title-descompotition">Descomposición en d (RTRT)</h4>
       {dhParams.map((params, i) => (
         <div key={i} className="matrix-container">
           <h3>T<sub>{i}</sub><sup>{i + 1}</sup></h3>
