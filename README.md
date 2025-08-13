@@ -34,10 +34,21 @@ Incluye generación de tablas de transformación homogénea, cálculo de **veloc
 - **React** → Interfaz y manejo de estado.
 - **Math.js** → Operaciones numéricas y matriciales.
 - **Algebrite** → Cálculos simbólicos.
-- **Tailwind CSS** (opcional si aplicaste estilos) → Estilización de la interfaz.
 
 ---
 
 ## 📂 Estructura del proyecto
 
+/src
+├── components
+│ ├── DHTable.jsx # Componente para ingresar parámetros DH
+│ ├── Transformation.jsx # Generación de matrices homogéneas
+│ ├── VelocityDisplay.jsx# Cálculo y visualización de velocidades
+│ ├── DeterminantCalc.jsx# Determinante y singularidades
+│
+├── utils
+│ ├── mathHelpers.js # Funciones auxiliares para cálculos
+│
+├── App.jsx
+└── index.js
 
