@@ -76,7 +76,7 @@ function App() {
               />
               <button
                 className="App-button"
-                onClick={() => numLinks > 0 && numLinks <= 6 && updateStep(2)}
+                onClick={() => numLinks > 0 && numLinks <= 10 && updateStep(2)}
               >
                 Continuar
               </button>
