@@ -42,7 +42,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1 className="App-title">Biomecatrónica - Cinemática Directa</h1>
+        <div className="App-title"><h1>Biomecatrónica - Cinemática Directa</h1></div>
 
 
         {step === 0 && (
