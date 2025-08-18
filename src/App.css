@@ -8,7 +8,7 @@
 }
 
 .App-header {
-  background-color: #282B28;
+  background-color: #000;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -20,15 +20,22 @@
 
 .App-title {
   width: 100%;
-  background-color: #83BCA9;
+  background: rgba(131, 188, 169, 0.2); /* color translúcido */
+  backdrop-filter: blur(10px); /* efecto blur */
+  -webkit-backdrop-filter: blur(10px); /* soporte Safari */
+  
   box-shadow: 0px 10px 5px 0px rgba(0, 0, 0, 0.75);
   -webkit-box-shadow: -1px 10px 5px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: -1px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  
   margin: 0;
   margin-bottom: 80px;
   padding: 40px 0;
   font-size: 1.6em;
+  color: #fff; /* texto blanco para contraste */
+  border-radius: 12px; /* opcional, da look más elegante */
 }
+
 
 .separator {
   padding-top: 50%;
