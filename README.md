@@ -1,4 +1,101 @@
-# Getting Started with Create React App
+# 🤖 Interfaz React para Cinemática Directa de Manipuladores
+
+[![Ver la aplicación](https://img.shields.io/badge/🌐%20Ver%20Aplicación%20Online-000?style=for-the-badge&logo=vercel&logoColor=white)](https://matrices-cinematica-directa.vercel.app/)
+
+![React](https://img.shields.io/badge/React-18.0.0-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![Math.js](https://img.shields.io/badge/Math.js-AL-ff6f00?style=for-the-badge&logo=javascript&logoColor=white)
+![Algebrite](https://img.shields.io/badge/Algebrite-Symbolic%20Math-blue?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+Aplicación desarrollada en **React** que calcula la **cinemática directa** de un manipulador robótico de **n eslabones** usando parámetros **Denavit–Hartenberg (DH)**.  
+Incluye generación de tablas de transformación homogénea, cálculo de **velocidades angulares y lineales** y determinante del Jacobiano para analizar **restricciones y singularidades**.
+
+---
+
+## 📋 Características principales
+
+- **Ingreso de parámetros DH** de forma dinámica según el número de eslabones.
+- **Generación automática** de tablas de transformación homogénea para cada par de eslabones.
+- **Cálculo de velocidades angulares y lineales** usando formulaciones vectoriales y matriciales.
+- **Evaluación del determinante del Jacobiano** para identificar singularidades y restricciones de movimiento.
+- **Interfaz intuitiva** y adaptable para distintos robots.
+- Soporte para **resultados simbólicos** (Algebrite) y numéricos (Math.js).
+- **Simplificación trigonométrica avanzada** con aplicación automática de identidades trigonométricas.
+
+---
+
+## 🛠 Tecnologías utilizadas
+
+- **React** → Interfaz y manejo de estado.
+- **Math.js** → Operaciones numéricas y matriciales.
+- **Algebrite** → Cálculos simbólicos.
+
+---
+
+## 🚀 Instalación y uso
+
+### Prerrequisitos
+- Node.js (versión 14 o superior)
+- npm o yarn
+
+### Instalación
+```bash
+# Clonar el repositorio
+git clone https://github.com/santiago1525/Matrices-cinematica-directa.git
+
+# Navegar al directorio
+cd Matrices-cinematica-directa
+
+# Instalar dependencias
+npm install
+
+# Ejecutar en modo desarrollo
+npm start
+```
+
+La aplicación estará disponible en [http://localhost:3000](http://localhost:3000).
+
+---
+
+## 📚 Scripts disponibles
+
+### `npm start`
+Ejecuta la aplicación en modo desarrollo.
+
+### `npm test`
+Lanza el runner de pruebas en modo interactivo.
+
+### `npm run build`
+Construye la aplicación para producción en la carpeta `build`.
+
+### `npm run eject`
+**Nota: Esta es una operación irreversible.** Expone todos los archivos de configuración.
+
+---
+
+## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas. Por favor:
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+---
+
+## 📄 Licencia
+
+Distribuido bajo la Licencia MIT. Ver `LICENSE` para más información.
+
+---
+
+## 👨‍💻 Autor
+
+**Santiago** - [@santiago1525](https://github.com/santiago1525)
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

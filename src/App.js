@@ -42,7 +42,11 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+<<<<<<< HEAD
         <h1 className="App-title">Biomecatrónica - Cinemática Directa</h1>
+=======
+        <div className="App-title"><h1>Biomecatrónica - Cinemática Directa</h1></div>
+>>>>>>> 97fba3c603b1ec2968b972f3fb43fb1d5bcb9752
 
 
         {step === 0 && (
@@ -76,7 +80,11 @@ function App() {
               />
               <button
                 className="App-button"
+<<<<<<< HEAD
                 onClick={() => numLinks > 0 && numLinks <= 6 && updateStep(2)}
+=======
+                onClick={() => numLinks > 0 && numLinks <= 10 && updateStep(2)}
+>>>>>>> 97fba3c603b1ec2968b972f3fb43fb1d5bcb9752
               >
                 Continuar
               </button>
