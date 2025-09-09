@@ -103,6 +103,17 @@ const applyTrigIdentities = (expr) => {
     }
   );
   
+  // Identidad: sin(a) * sin(b) - cos(a) * cos(b) = -cos(a + b)
+  result = result.replace(
+    /sin\(([^)]+)\)\s*\*\s*sin\(([^)]+)\)\s*-\s*cos\(([^)]+)\)\s*\*\s*cos\(([^)]+)\)/g,
+    (match, a1, b1, a2, b2) => {
+      if (a1 === a2 && b1 === b2) {
+        return `-cos((${a1}) + (${b1}))`;
+      }
+      return match;
+    }
+  );
+  
   // Identidad: sin(a) * cos(b) + cos(a) * sin(b) = sin(a + b)
   result = result.replace(
     /sin\(([^)]+)\)\s*\*\s*cos\(([^)]+)\)\s*\+\s*cos\(([^)]+)\)\s*\*\s*sin\(([^)]+)\)/g,
@@ -142,6 +153,56 @@ const applyTrigIdentities = (expr) => {
     (match, a1, b1, a2, b2) => {
       if (a1 === a2 && b1 === b2) {
         return `sin((${b1}) - (${a1}))`;
+      }
+      return match;
+    }
+  );
+  
+  // Identidades con expresiones más complejas (como θ1 + θ2)
+  // Identidad: sin(A) * sin(B) - cos(A) * cos(B) = -cos(A + B) donde A y B pueden ser expresiones complejas
+  result = result.replace(
+    /sin\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*\*\s*sin\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*-\s*cos\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*\*\s*cos\(([^)]+(?:\([^)]*\))*[^)]*)\)/g,
+    (match, a1, b1, a2, b2) => {
+      // Normalizar espacios para comparación
+      const normalizeExpr = (expr) => expr.replace(/\s+/g, '');
+      if (normalizeExpr(a1) === normalizeExpr(a2) && normalizeExpr(b1) === normalizeExpr(b2)) {
+        return `-cos((${a1}) + (${b1}))`;
+      }
+      return match;
+    }
+  );
+  
+  // Identidad: cos(A) * cos(B) + sin(A) * sin(B) = cos(A - B) para expresiones complejas
+  result = result.replace(
+    /cos\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*\*\s*cos\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*\+\s*sin\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*\*\s*sin\(([^)]+(?:\([^)]*\))*[^)]*)\)/g,
+    (match, a1, b1, a2, b2) => {
+      const normalizeExpr = (expr) => expr.replace(/\s+/g, '');
+      if (normalizeExpr(a1) === normalizeExpr(a2) && normalizeExpr(b1) === normalizeExpr(b2)) {
+        return `cos((${a1}) - (${b1}))`;
+      }
+      return match;
+    }
+  );
+  
+  // Identidad: -(sin(A) * sin(B) + cos(A) * cos(B)) = -cos(A - B) para expresiones negativas con paréntesis
+  result = result.replace(
+    /-\(\s*sin\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*\*\s*sin\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*\+\s*cos\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*\*\s*cos\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*\)/g,
+    (match, a1, b1, a2, b2) => {
+      const normalizeExpr = (expr) => expr.replace(/\s+/g, '');
+      if (normalizeExpr(a1) === normalizeExpr(a2) && normalizeExpr(b1) === normalizeExpr(b2)) {
+        return `-cos((${a1}) - (${b1}))`;
+      }
+      return match;
+    }
+  );
+  
+  // Identidad: -(cos(A) * cos(B) + sin(A) * sin(B)) = -cos(A - B) (orden alternativo)
+  result = result.replace(
+    /-\(\s*cos\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*\*\s*cos\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*\+\s*sin\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*\*\s*sin\(([^)]+(?:\([^)]*\))*[^)]*)\)\s*\)/g,
+    (match, a1, b1, a2, b2) => {
+      const normalizeExpr = (expr) => expr.replace(/\s+/g, '');
+      if (normalizeExpr(a1) === normalizeExpr(a2) && normalizeExpr(b1) === normalizeExpr(b2)) {
+        return `-cos((${a1}) - (${b1}))`;
       }
       return match;
     }

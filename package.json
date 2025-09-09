@@ -9,21 +9,12 @@
     "@testing-library/user-event": "^13.5.0",
     "algebrite": "^1.4.0",
     "mathjs": "^14.4.0",
-<<<<<<< HEAD
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
     "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4",
     "webpack": "^5.101.2"
-=======
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-icons": "^5.5.0",
-    "react-scripts": "^5.0.1",
-    "web-vitals": "^2.1.4",
-    "webpack": "^5.98.0"
->>>>>>> 97fba3c603b1ec2968b972f3fb43fb1d5bcb9752
   },
   "scripts": {
     "start": "react-scripts start",
