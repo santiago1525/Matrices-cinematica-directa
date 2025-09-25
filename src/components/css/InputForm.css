@@ -15,9 +15,54 @@
     align-items: center;
     justify-content: space-evenly;
     gap: 15px;
+    margin-bottom: 10px;
 }
 
+/* Estilos para los botones del formulario */
+.form-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
 
+.App-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
 
+.calculate-btn {
+    background-color: #4CAF50;
+    color: white;
+}
 
+.calculate-btn:hover {
+    background-color: #45a049;
+}
 
+.clear-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.clear-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* Estilos responsivos */
+@media (max-width: 600px) {
+    .form-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .App-button {
+        width: 100%;
+        max-width: 200px;
+    }
+}

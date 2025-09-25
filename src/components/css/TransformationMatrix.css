@@ -31,6 +31,7 @@
     text-align: center;
     font-family: monospace;
     color: #fff;
+    width: 90%;
 }
 
 .matrix.final {
@@ -68,6 +69,7 @@
     .matrix {
         border-radius: 20px;
         border: 3px solid #000;
+        min-width: 70vw;
     }
 
     .matrix div {
@@ -75,7 +77,10 @@
     }
 
     .final-matrix {
-        width: 85%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -83,5 +88,218 @@
     .matrix.final {
         font-size: 10px;
         /* Solo 1 columna */
+    }
+}
+
+/* Estilos para el contenedor de fila de matriz */
+.matrix-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 15px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+/* Estilos para el menú desplegable */
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropdown-toggle {
+    background-color: #ff7b25;
+    /* Naranja */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+
+.dropdown-toggle:hover {
+    background-color: #e66a1a;
+}
+
+.dropdown-arrow {
+    font-size: 0.7em;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 100%;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 8px 15px;
+    text-align: left;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.dropdown-item:hover {
+    background-color: #f5f5f5;
+    color: #ff7b25;
+}
+
+/* Estilos para el modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    padding: 25px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Contenedor de la matriz dentro del modal */
+.modal-matrix-container {
+    padding: 20px 0;
+}
+
+/* Asegurar que la tabla de la matriz no se rompa en pantallas pequeñas */
+.modal-matrix-container .matrix {
+    margin: 0 auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.3em;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.close-button:hover {
+    color: #ff7b25;
+}
+
+/* Ajustes responsivos para móviles */
+@media (max-width: 600px) {
+    .modal-content {
+        overflow: auto;
+        /* Scroll solo en móviles */
+    }
+
+    .modal-matrix-container {
+        overflow-x: auto;
+        /* Scroll horizontal solo en móviles */
+    }
+
+    .matrix-row {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .final-matrix {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dropdown-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dropdown-menu {
+        width: 100%;
+    }
+
+    .modal-content {
+        padding: 15px;
+        max-width: 95%;
+    }
+
+    .modal-header h3 {
+        font-size: 1.1em;
+    }
+
+    /* Asegurar que la matriz sea desplazable horizontalmente en móviles */
+    .modal-matrix-container {
+        -webkit-overflow-scrolling: touch;
+        overflow-x: scroll;
+        padding-bottom: 10px;
+    }
+
+    /* Asegurar que la tabla de la matriz no se rompa en pantallas pequeñas */
+    .modal-matrix-container .matrix {
+        margin: 0 auto;
+        width: max-content;
+    }
+
+    .modal-matrix-container::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .modal-matrix-container::-webkit-scrollbar-thumb {
+        background-color: #ff7b25;
+        border-radius: 4px;
+    }
+
+    .modal-matrix-container::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+        border-radius: 4px;
     }
 }

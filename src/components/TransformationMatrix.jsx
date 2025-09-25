@@ -293,19 +293,125 @@ export const computeMatrixD = ({ θ, α, a, d }) => {
   ];
 };
 
+// Función para renderizar celdas de la matriz
+const renderCell = (cell) => typeof cell === 'number' ? cell.toFixed(0) : cell;
+
+// Componente para el modal
+const MatrixModal = ({ isOpen, onClose, matrix, title }) => {
+  if (!isOpen) return null;
+  
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <div className="modal-header">
+          <h3>Matriz de Transformación {title}</h3>
+          <button className="close-button" onClick={onClose}>×</button>
+        </div>
+        <div className="modal-matrix-container">
+          <div className="matrix">
+            {matrix.flat().map((v, idx) => (
+              <div key={idx}>{renderCell(v)}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Componente para el menú desplegable
+const MatrixDropdown = ({ currentFrame, totalFrames, onSelect, isOpen, onToggle }) => {
+  const options = [];
+  
+  // Generar opciones desde el marco actual hasta 0
+  for (let i = currentFrame - 1; i >= 0; i--) {
+    options.push(
+      <button 
+        key={i} 
+        className="dropdown-item"
+        onClick={() => onSelect(i)}
+      >
+        T{currentFrame}→T{i}
+      </button>
+    );
+  }
+  
+  return (
+    <div className="dropdown-container">
+      <button 
+        className="dropdown-toggle"
+        onClick={onToggle}
+      >
+        <span>Ver transformación</span>
+        <span className="dropdown-arrow">▼</span>
+      </button>
+      {isOpen && options.length > 0 && (
+        <div className="dropdown-menu">
+          {options}
+        </div>
+      )}
+    </div>
+  );
+};
+
 function TransformationMatrix({ dhParams, onMatricesComputed }) {
   const [finalMatrixA, setFinalMatrixA] = useState(null);
   const [finalMatrixD, setFinalMatrixD] = useState(null);
+  // Variables de estado para las matrices intermedias (se usan en el cálculo de las matrices finales)
+  const [, setIntermediateMatricesA] = useState([]);
+  const [, setIntermediateMatricesD] = useState([]);
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    matrix: null,
+    title: ''
+  });
+
+  // Función para calcular la matriz entre dos frames
+  const getTransformationBetweenFrames = (startFrame, endFrame, matrixType) => {
+    if (startFrame === endFrame) return null;
+    const step = startFrame > endFrame ? -1 : 1;
+    const computeFn = matrixType === 'A' ? computeMatrixA : computeMatrixD;
+    
+    let result = computeFn(dhParams[startFrame]);
+    for (let i = startFrame + step; i !== endFrame + step; i += step) {
+      result = multiplyMatrices(result, computeFn(dhParams[i]));
+    }
+    return result;
+  };
+
+  // Manejar la selección de un frame objetivo
+  const handleFrameSelect = (startFrame, endFrame, matrixType) => {
+    const result = getTransformationBetweenFrames(startFrame, endFrame, matrixType);
+    setModalState({
+      isOpen: true,
+      matrix: result,
+      title: `T${startFrame}→T${endFrame}`
+    });
+    setActiveDropdown(null);
+  };
+
+  // Cerrar el modal
+  const closeModal = () => {
+    setModalState(prev => ({ ...prev, isOpen: false }));
+  };
 
   useEffect(() => {
     if (dhParams.length > 0) {
-      let resA = computeMatrixA(dhParams[0]);
-      dhParams.slice(1).forEach(p => { resA = multiplyMatrices(resA, computeMatrixA(p)); });
-      setFinalMatrixA(resA);
-      let resD = computeMatrixD(dhParams[0]);
-      dhParams.slice(1).forEach(p => { resD = multiplyMatrices(resD, computeMatrixD(p)); });
-      setFinalMatrixD(resD);
-      onMatricesComputed?.({ A: resA, D: resD });
+      // Calcular y guardar todas las matrices intermedias
+      const matricesA = [computeMatrixA(dhParams[0])];
+      const matricesD = [computeMatrixD(dhParams[0])];
+      
+      for (let i = 1; i < dhParams.length; i++) {
+        matricesA.push(multiplyMatrices(matricesA[i-1], computeMatrixA(dhParams[i])));
+        matricesD.push(multiplyMatrices(matricesD[i-1], computeMatrixD(dhParams[i])));
+      }
+      
+      setFinalMatrixA(matricesA[matricesA.length - 1]);
+      setFinalMatrixD(matricesD[matricesD.length - 1]);
+      setIntermediateMatricesA(matricesA);
+      setIntermediateMatricesD(matricesD);
+      onMatricesComputed?.({ A: matricesA[matricesA.length - 1], D: matricesD[matricesD.length - 1] });
     }
   }, [dhParams, onMatricesComputed]);
 
@@ -314,32 +420,86 @@ function TransformationMatrix({ dhParams, onMatricesComputed }) {
   return (
     <div className="transformation-container">
       <h2 className="transformation-container-title">Matrices de Transformación</h2>
+      
+      {/* Sección de matrices A (RTTR) */}
       <h4 className="title-descompotition">Descomposición en a (RTTR)</h4>
       {dhParams.map((params, i) => (
-        <div key={i} className="matrix-container">
-          <h3>T<sub>{i}</sub><sup>{i + 1}</sup></h3>
-          <div className="matrix">{computeMatrixA(params).flat().map((v, idx) => <div key={idx}>{renderCell(v)}</div>)}</div>
+        <div key={`A-${i}`} className="matrix-row">
+          <div className="matrix-container">
+            <h3>T<sub>{i}</sub><sup>{i + 1}</sup></h3>
+            <div className="matrix">
+              {computeMatrixA(params).flat().map((v, idx) => (
+                <div key={idx}>{renderCell(v)}</div>
+              ))}
+            </div>
+          </div>
+          {i > 0 && (
+            <MatrixDropdown
+              currentFrame={i}
+              totalFrames={dhParams.length}
+              onSelect={(targetFrame) => handleFrameSelect(i, targetFrame, 'A')}
+              isOpen={activeDropdown === `A-${i}`}
+              onToggle={() => setActiveDropdown(activeDropdown === `A-${i}` ? null : `A-${i}`)}
+            />
+          )}
         </div>
       ))}
+      
+      {/* Matriz final A */}
       {finalMatrixA && (
         <div className="final-matrix">
           <h2 className="final-matrix-title">Matriz Final (A)</h2>
-          <div className="matrix final">{finalMatrixA.flat().map((v, idx) => <div key={idx}>{renderCell(v)}</div>)}</div>
+          <div className="matrix final">
+            {finalMatrixA.flat().map((v, idx) => (
+              <div key={idx}>{renderCell(v)}</div>
+            ))}
+          </div>
         </div>
       )}
+
+      {/* Sección de matrices D (RTRT) */}
       <h4 className="title-descompotition">Descomposición en d (RTRT)</h4>
       {dhParams.map((params, i) => (
-        <div key={i} className="matrix-container">
-          <h3>T<sub>{i}</sub><sup>{i + 1}</sup></h3>
-          <div className="matrix">{computeMatrixD(params).flat().map((v, idx) => <div key={idx}>{renderCell(v)}</div>)}</div>
+        <div key={`D-${i}`} className="matrix-row">
+          <div className="matrix-container">
+            <h3>T<sub>{i}</sub><sup>{i + 1}</sup></h3>
+            <div className="matrix">
+              {computeMatrixD(params).flat().map((v, idx) => (
+                <div key={idx}>{renderCell(v)}</div>
+              ))}
+            </div>
+          </div>
+          {i > 0 && (
+            <MatrixDropdown
+              currentFrame={i}
+              totalFrames={dhParams.length}
+              onSelect={(targetFrame) => handleFrameSelect(i, targetFrame, 'D')}
+              isOpen={activeDropdown === `D-${i}`}
+              onToggle={() => setActiveDropdown(activeDropdown === `D-${i}` ? null : `D-${i}`)}
+            />
+          )}
         </div>
       ))}
+      
+      {/* Matriz final D */}
       {finalMatrixD && (
         <div className="final-matrix">
           <h2 className="final-matrix-title">Matriz Final (D)</h2>
-          <div className="matrix final">{finalMatrixD.flat().map((v, idx) => <div key={idx}>{renderCell(v)}</div>)}</div>
+          <div className="matrix final">
+            {finalMatrixD.flat().map((v, idx) => (
+              <div key={idx}>{renderCell(v)}</div>
+            ))}
+          </div>
         </div>
       )}
+
+      {/* Modal para mostrar las transformaciones */}
+      <MatrixModal
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        matrix={modalState.matrix}
+        title={modalState.title}
+      />
     </div>
   );
 }
