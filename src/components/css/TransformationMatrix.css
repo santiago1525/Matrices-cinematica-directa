@@ -179,6 +179,7 @@
     align-items: center;
     z-index: 1000;
     padding: 20px;
+    overflow: auto;
 }
 
 .modal-content {
@@ -189,11 +190,67 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
+    max-height: 90vh;
+    max-width: 95vw;
+    overflow: hidden;
+    width: auto;
+    min-width: 300px;
 }
 
 /* Contenedor de la matriz dentro del modal */
 .modal-matrix-container {
     padding: 20px 0;
+    overflow-x: auto;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Estilo para la matriz dentro del modal */
+.modal-matrix-container .matrix {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 10px;
+    background-color: #201f1f;
+    color: #fff;
+    font-family: monospace;
+    text-align: center;
+    max-width: 100%;
+    overflow: auto;
+    margin: 0 auto;
+    border: 1px solid #444;
+    border-radius: 4px;
+}
+
+/* Estilo para las celdas de la matriz en el modal */
+.modal-matrix-container .matrix > div {
+    padding: 10px;
+    border: 1px solid #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    word-break: break-word;
+    font-size: 0.9em;
+    background-color: #2a2a2a;
+    border-radius: 4px;
+    line-height: 1.3;
+}
+
+/* Barra de desplazamiento personalizada */
+.modal-matrix-container::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+.modal-matrix-container::-webkit-scrollbar-thumb {
+    background-color: #ff7b25;
+    border-radius: 4px;
+}
+
+.modal-matrix-container::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 4px;
 }
 
 /* Asegurar que la tabla de la matriz no se rompa en pantallas pequeñas */
@@ -234,13 +291,31 @@
 /* Ajustes responsivos para móviles */
 @media (max-width: 600px) {
     .modal-content {
-        overflow: auto;
-        /* Scroll solo en móviles */
+        padding: 15px;
+        max-width: 100%;
+        margin: 10px;
+        width: 95%;
+    }
+    
+    .modal-matrix-container .matrix {
+        grid-template-columns: repeat(4, minmax(60px, 1fr));
+        gap: 4px;
+        padding: 5px;
+    }
+    
+    .modal-matrix-container .matrix > div {
+        padding: 5px 3px;
+        font-size: 0.8em;
+        min-height: 30px;
     }
 
     .modal-matrix-container {
-        overflow-x: auto;
-        /* Scroll horizontal solo en móviles */
+        width: 100%;
+        padding: 10px 0;
+    }
+    
+    .modal-matrix-container .matrix {
+        min-width: 100%;
     }
 
     .matrix-row {
@@ -283,10 +358,13 @@
         padding-bottom: 10px;
     }
 
-    /* Asegurar que la tabla de la matriz no se rompa en pantallas pequeñas */
+    /* Asegurar que la tabla de la matriz sea desplazable */
     .modal-matrix-container .matrix {
         margin: 0 auto;
-        width: max-content;
+        width: auto;
+        max-width: 100%;
+        display: block;
+        overflow-x: auto;
     }
 
     .modal-matrix-container::-webkit-scrollbar {

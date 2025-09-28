@@ -243,17 +243,20 @@ const safeAdd = (x, y) => {
   return simplifyExpr(expr);
 };
 
-// Multiplica matrices 4x4 simbólicas
+// Multiplica matrices 4x4 simbólicas y aplica simplificaciones
 export const multiplyMatrices = (A, B) => {
   const result = Array(4).fill(null).map(() => Array(4).fill(0));
   for (let i = 0; i < 4; i++) {
     for (let j = 0; j < 4; j++) {
       let sum = 0;
       for (let k = 0; k < 4; k++) {
+        // Multiplicar los elementos y aplicar simplificación
         const prod = safeMultiply(A[i][k], B[k][j]);
+        // Sumar al resultado actual, asegurando mantener la expresión simbólica
         sum = sum === 0 ? prod : (prod !== 0 ? safeAdd(sum, prod) : sum);
       }
-      result[i][j] = sum;
+      // Aplicar simplificaciones adicionales al resultado final
+      result[i][j] = typeof sum === 'string' ? simplifyExpr(sum) : sum;
     }
   }
   return result;
@@ -323,7 +326,8 @@ const MatrixModal = ({ isOpen, onClose, matrix, title }) => {
 const MatrixDropdown = ({ currentFrame, totalFrames, onSelect, isOpen, onToggle }) => {
   const options = [];
   
-  // Generar opciones desde el marco actual hasta 0
+  // Generar opciones desde el marco actual-1 hasta 0
+  // Para 6 eslabones (índices 0-5), si currentFrame es 5, mostrará opciones hasta T5→T0
   for (let i = currentFrame - 1; i >= 0; i--) {
     options.push(
       <button 
@@ -331,7 +335,7 @@ const MatrixDropdown = ({ currentFrame, totalFrames, onSelect, isOpen, onToggle 
         className="dropdown-item"
         onClick={() => onSelect(i)}
       >
-        T{currentFrame}→T{i}
+        T{currentFrame+1}→T{i+1}
       </button>
     );
   }
@@ -368,13 +372,16 @@ function TransformationMatrix({ dhParams, onMatricesComputed }) {
   });
 
   // Función para calcular la matriz entre dos frames
+  // Multiplica en el mismo orden que el cálculo de la matriz final: T0 * T1 * ... * Tn
   const getTransformationBetweenFrames = (startFrame, endFrame, matrixType) => {
     if (startFrame === endFrame) return null;
-    const step = startFrame > endFrame ? -1 : 1;
+    
     const computeFn = matrixType === 'A' ? computeMatrixA : computeMatrixD;
     
-    let result = computeFn(dhParams[startFrame]);
-    for (let i = startFrame + step; i !== endFrame + step; i += step) {
+    // Multiplicamos en orden ascendente para mantener consistencia con el cálculo final
+    // Ejemplo: Para T0→T4, calculamos T0 * T1 * T2 * T3 * T4
+    let result = computeFn(dhParams[endFrame]);
+    for (let i = endFrame + 1; i <= startFrame; i++) {
       result = multiplyMatrices(result, computeFn(dhParams[i]));
     }
     return result;
@@ -382,6 +389,18 @@ function TransformationMatrix({ dhParams, onMatricesComputed }) {
 
   // Manejar la selección de un frame objetivo
   const handleFrameSelect = (startFrame, endFrame, matrixType) => {
+    // Verificamos que los índices sean válidos
+    if (startFrame < 0 || endFrame < 0 || startFrame >= dhParams.length || endFrame >= dhParams.length) {
+      console.warn('Índices de frames fuera de rango');
+      return;
+    }
+    
+    // Aseguramos que startFrame sea mayor que endFrame
+    if (startFrame <= endFrame) {
+      console.warn('El frame de inicio debe ser mayor que el frame final para la transformación');
+      return;
+    }
+    
     const result = getTransformationBetweenFrames(startFrame, endFrame, matrixType);
     setModalState({
       isOpen: true,
