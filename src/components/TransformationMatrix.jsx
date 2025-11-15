@@ -234,7 +234,41 @@ const simplifyExpr = (expr) => {
 
 // Operaciones simbólicas seguras
 const safeMultiply = (x, y) => {
-  const expr = `(${x}) * (${y})`;
+  // Si ambos son números, realizar la multiplicación directamente
+  if (typeof x === 'number' && typeof y === 'number') {
+    return x * y;
+  }
+  
+  // Si uno es 0, el resultado es 0
+  if ((typeof x === 'number' && x === 0) || (typeof y === 'number' && y === 0)) {
+    return 0;
+  }
+  
+  // Si uno es 1, devolver el otro
+  if (typeof x === 'number' && x === 1) return y;
+  if (typeof y === 'number' && y === 1) return x;
+  if (typeof x === 'number' && x === -1) return `-${y}`;
+  if (typeof y === 'number' && y === -1) return `-${x}`;
+  
+  // Para expresiones simbólicas, organizar términos consistentemente
+  let term1 = typeof x === 'string' ? x.trim() : x;
+  let term2 = typeof y === 'string' ? y.trim() : y;
+  
+  // Orden alfabético para consistencia (excepto para números)
+  if (typeof term1 === 'string' && typeof term2 === 'string') {
+    // Priorizar funciones trigonométricas y variables en orden específico
+    const getPriority = (term) => {
+      if (term.startsWith('cos(') || term.startsWith('sin(')) return 1;
+      if (/^[a-zA-Z]/.test(term)) return 2;
+      return 3;
+    };
+    
+    if (getPriority(term1) > getPriority(term2)) {
+      [term1, term2] = [term2, term1];
+    }
+  }
+  
+  const expr = `${term1} * ${term2}`;
   return simplifyExpr(expr);
 };
 

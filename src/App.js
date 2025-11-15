@@ -5,6 +5,7 @@ import InputForm from "./components/InputForm";
 import Table from "./components/Table";
 import TransformationMatrix from "./components/TransformationMatrix";
 import VelocityDisplay from './components/VelocityDisplay';
+import TrajectoryCalculator from './components/TrajectoryCalculator';
 import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowRotateLeft } from "react-icons/fa6";
 
@@ -114,9 +115,26 @@ function App() {
 
         {
           step === 4 && (
-            <VelocityDisplay
-              mats={mats}
+            <>
+              <VelocityDisplay
+                mats={mats}
+                numLinks={numLinks}
+              />
+              <button
+                className="App-button"
+                onClick={() => updateStep(5)}
+              >
+                Calcular Trayectorias
+              </button>
+            </>
+          )
+        }
+
+        {
+          step === 5 && (
+            <TrajectoryCalculator
               numLinks={numLinks}
+              dhParams={dhParams}
             />
           )
         }
